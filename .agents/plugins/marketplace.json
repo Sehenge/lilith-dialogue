@@ -1,0 +1,20 @@
+{
+  "name": "lilith-dialogue",
+  "interface": {
+    "displayName": "Lilith Dialogue"
+  },
+  "plugins": [
+    {
+      "name": "lilith-dialogue",
+      "source": {
+        "source": "local",
+        "path": "./plugins/lilith-dialogue"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

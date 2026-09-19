@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "lilith_dialogue": {
+      "command": "python3",
+      "args": ["./server.py"],
+      "cwd": ".",
+      "enabled": true,
+      "enabled_tools": ["dialogue_preferences", "shape_dialogue"],
+      "omit_tools_from": ["deferred"],
+      "startup_timeout_sec": 10,
+      "tool_timeout_sec": 10
+    }
+  }
+}

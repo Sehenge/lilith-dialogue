@@ -62,7 +62,8 @@ The MCP server also passed a direct JSON-RPC smoke test for `initialize`, `tools
 Completed on 2026-09-19:
 
 - Initially registered `/home/alex/Documents/lilith-dialogue` as the local marketplace `personal` and installed `lilith-dialogue@personal` version `0.1.0`.
-- The repository marketplace was subsequently renamed to `lilith-dialogue` for GitHub distribution. Local Codex registration must use the new name after the repository is published.
+- Published the public repository at `https://github.com/Sehenge/lilith-dialogue`.
+- Renamed the marketplace to `lilith-dialogue`, registered it from GitHub, and installed and enabled `lilith-dialogue@lilith-dialogue` version `0.1.0`.
 - Verified the installed plugin with `codex plugin list --json`.
 - Re-ran plugin and skill validation successfully.
 - Ran a JSON-RPC smoke test against the installed copy for `initialize`, `tools/list`, and `tools/call` (`shape_dialogue`).

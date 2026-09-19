@@ -78,6 +78,20 @@ codex plugin add lilith-dialogue@lilith-dialogue
 
 Open a new Codex session after updating.
 
+## Uninstallation
+
+Remove the plugin and its local cache:
+
+```bash
+codex plugin remove lilith-dialogue@lilith-dialogue
+```
+
+If you no longer need the marketplace, remove it as well:
+
+```bash
+codex plugin marketplace remove lilith-dialogue
+```
+
 ## Project structure
 
 ```text

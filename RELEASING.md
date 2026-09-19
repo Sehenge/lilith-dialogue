@@ -17,8 +17,8 @@ Releases are created from signed-off version tags after the repository passes it
 Create and push a tag matching the manifest version exactly:
 
 ```bash
-git tag -a v0.1.1 -m "Lilith Dialogue v0.1.1"
-git push origin v0.1.1
+git tag -a v0.2.0 -m "Lilith Dialogue v0.2.0"
+git push origin v0.2.0
 ```
 
 The `Release` workflow verifies the tag against the plugin manifest, runs the test suite, and creates the GitHub Release with generated notes.

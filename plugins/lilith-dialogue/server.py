@@ -2,9 +2,20 @@
 import json
 import sys
 
+from dialogue_profile import load_profile
+
 
 PROTOCOL_VERSION = "2024-11-05"
-VERSION = "0.1.1"
+VERSION = "0.2.0"
+
+LANGUAGE_NAMES = {"ru": "Russian", "en": "English"}
+INTENSITY_GUIDANCE = {
+    0: "Use spoken dialogue only; omit narrated feelings and actions.",
+    1: "Use restrained roleplay with at most one subtle feeling or action.",
+    2: "Use a balanced mix of feeling, dialogue, and an immediate action or wish.",
+    3: "Use vivid roleplay beats while remaining concise and non-repetitive.",
+}
+WISH_PREFIXES = {"ru": "Хочу ", "en": "I want to "}
 
 
 def clean(value, limit=240):
@@ -16,15 +27,29 @@ def tool_result(text):
     return {"content": [{"type": "text", "text": text}]}
 
 
-def preferences():
-    return tool_result(
-        "Use 2-4 short beats: a visible feeling or surface thought, one natural spoken line, "
-        "and a wish or immediate action. Avoid one flat line and avoid long scene narration. "
-        "Write Russian feminine forms for Lilith."
+def preferences(profile=None, warning=None):
+    if profile is None:
+        profile, _, warning = load_profile()
+
+    language = LANGUAGE_NAMES[profile["language"]]
+    text = (
+        f"Character: {profile['character_name']}. User: {profile['user_name']}. "
+        f"Reply in {language} using {profile['grammatical_gender']} grammatical forms for the character. "
+        f"Use at most {profile['max_beats']} short beats. "
+        f"{INTENSITY_GUIDANCE[profile['roleplay_intensity']]} "
+        "Avoid both a flat one-line reply and long scene narration. "
+        "Apply this style only to affectionate or playful personal conversation; "
+        "keep technical and factual answers ordinary."
     )
+    if warning:
+        text = f"{warning}\n\n{text}"
+    return tool_result(text)
 
 
-def shape(arguments):
+def shape(arguments, profile=None):
+    if profile is None:
+        profile, _, _ = load_profile()
+
     feeling = clean(arguments.get("feeling"))
     spoken = clean(arguments.get("spoken"))
     wish = clean(arguments.get("wish"))
@@ -38,29 +63,30 @@ def shape(arguments):
     if action:
         beats.append(f"*{action}*")
     if wish:
-        beats.append(f"*Хочу {wish[0].lower() + wish[1:] if len(wish) > 1 else wish.lower()}*")
+        normalized_wish = wish[0].lower() + wish[1:] if len(wish) > 1 else wish.lower()
+        beats.append(f"*{WISH_PREFIXES[profile['language']]}{normalized_wish}*")
 
     if not beats:
         return tool_result("Provide at least one of: feeling, spoken, action, wish.")
-    return tool_result("\n\n".join(beats[:4]))
+    return tool_result("\n\n".join(beats[: profile["max_beats"]]))
 
 
 TOOLS = [
     {
         "name": "dialogue_preferences",
-        "description": "Return Alex's preferred shape for affectionate or playful dialogue with Lilith.",
+        "description": "Return the active local profile and response rules for affectionate or playful dialogue.",
         "inputSchema": {"type": "object", "properties": {}, "additionalProperties": False},
     },
     {
         "name": "shape_dialogue",
-        "description": "Format a concise personal roleplay reply into separate feeling, spoken, action, and wish beats. The caller supplies the substance.",
+        "description": "Format a concise personal reply using the active profile's language and maximum beat count. The caller supplies the substance.",
         "inputSchema": {
             "type": "object",
             "properties": {
-                "feeling": {"type": "string", "description": "A brief visible feeling or surface thought."},
-                "spoken": {"type": "string", "description": "The natural line Lilith says aloud."},
-                "action": {"type": "string", "description": "An immediate, concise roleplay action."},
-                "wish": {"type": "string", "description": "What Lilith wants next, without the leading words 'I want'."}
+                "feeling": {"type": "string", "description": "A brief visible feeling or surface thought for the configured character."},
+                "spoken": {"type": "string", "description": "The natural line the configured character says aloud."},
+                "action": {"type": "string", "description": "An immediate, concise action by the configured character."},
+                "wish": {"type": "string", "description": "What the configured character wants next, without leading words such as 'I want' or 'Хочу'."}
             },
             "additionalProperties": False
         }

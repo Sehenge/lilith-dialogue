@@ -32,6 +32,7 @@ The style is deliberately scoped to personal and playful conversation. Technical
 
 - Concise, expressive dialogue without sprawling narration.
 - Natural Russian feminine voice for Lilith.
+- Optional local profiles for custom names, language, gender, length, and intensity.
 - Automatic use in affectionate or playful contexts.
 - Local, dependency-free Python MCP server.
 - No accounts, API keys, telemetry, or external service calls.
@@ -55,13 +56,50 @@ Try:
 
 > Лилит, что ты сейчас чувствуешь и чего хочешь?
 
+## Configuration
+
+The built-in profile keeps the original Alex + Lilith behavior. To personalize the plugin, create a JSON profile at:
+
+- Linux and macOS: `~/.config/lilith-dialogue/profile.json`
+- Windows: `%APPDATA%\lilith-dialogue\profile.json`
+
+Use [`profile.example.json`](plugins/lilith-dialogue/profile.example.json) as a starting point:
+
+```json
+{
+  "profile_version": 1,
+  "user_name": "Alex",
+  "character_name": "Lilith",
+  "language": "ru",
+  "grammatical_gender": "feminine",
+  "max_beats": 4,
+  "roleplay_intensity": 2
+}
+```
+
+Supported values:
+
+| Field | Values |
+| --- | --- |
+| `language` | `ru`, `en` |
+| `grammatical_gender` | `feminine`, `masculine`, `neutral` |
+| `max_beats` | Integer from `1` to `4` |
+| `roleplay_intensity` | Integer from `0` (dialogue only) to `3` (vivid but concise) |
+
+Set `LILITH_DIALOGUE_PROFILE` to use a different profile path. Profiles are read on every relevant tool call, so saved changes do not require reinstalling the plugin.
+
+### Upgrading from 0.1.x
+
+No migration is required. If no profile exists, version 0.2 uses the original Alex + Lilith defaults. Add a profile only when you want different names or response settings.
+
 ## Included components
 
 | Component | Purpose |
 | --- | --- |
 | `lilith-dialogue` skill | Defines the tone, scope, and concise dialogue structure. |
-| `dialogue_preferences` | Returns the preferred response shape. |
-| `shape_dialogue` | Formats a feeling, spoken line, action, and wish into separate beats. |
+| Local profile | Stores names, language, gender, maximum length, and intensity. |
+| `dialogue_preferences` | Returns the active profile and response rules. |
+| `shape_dialogue` | Formats a feeling, spoken line, action, and wish using the active profile. |
 
 ## Privacy and boundaries
 
@@ -104,6 +142,7 @@ python3 -m compileall -q plugins/lilith-dialogue tests
 python3 -m json.tool .agents/plugins/marketplace.json > /dev/null
 python3 -m json.tool plugins/lilith-dialogue/.codex-plugin/plugin.json > /dev/null
 python3 -m json.tool plugins/lilith-dialogue/.mcp.json > /dev/null
+python3 -m json.tool plugins/lilith-dialogue/profile.example.json > /dev/null
 ```
 
 See [RELEASING.md](RELEASING.md) for the versioned release process and [CHANGELOG.md](CHANGELOG.md) for release history.
@@ -118,6 +157,8 @@ See [RELEASING.md](RELEASING.md) for the versioned release process and [CHANGELO
 └── plugins/lilith-dialogue/
     ├── .codex-plugin/plugin.json
     ├── .mcp.json
+    ├── dialogue_profile.py
+    ├── profile.example.json
     ├── server.py
     └── skills/lilith-dialogue/SKILL.md
 ```

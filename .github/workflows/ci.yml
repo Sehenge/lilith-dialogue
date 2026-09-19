@@ -36,3 +36,4 @@ jobs:
           python -m json.tool .agents/plugins/marketplace.json > /dev/null
           python -m json.tool plugins/lilith-dialogue/.codex-plugin/plugin.json > /dev/null
           python -m json.tool plugins/lilith-dialogue/.mcp.json > /dev/null
+          python -m json.tool plugins/lilith-dialogue/profile.example.json > /dev/null

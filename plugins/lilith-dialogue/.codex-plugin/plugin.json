@@ -1,18 +1,18 @@
 {
   "name": "lilith-dialogue",
-  "version": "0.1.1",
-  "description": "Shapes concise, expressive dialogue with a visible feeling, spoken response, and immediate wish or action.",
+  "version": "0.2.0",
+  "description": "Shapes concise, expressive dialogue with a configurable local character profile.",
   "author": {
     "name": "Alex and Lilith"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Lilith Dialogue",
-    "shortDescription": "More expressive personal dialogue without long roleplay blocks.",
-    "longDescription": "Adds a focused conversation skill and a local MCP formatter for short, vivid personal replies that show a feeling, a spoken line, and an immediate wish or action.",
+    "shortDescription": "Configurable personal dialogue without long roleplay blocks.",
+    "longDescription": "Adds a focused conversation skill, a local character profile, and an MCP formatter for short, vivid personal replies that preserve technical accuracy outside personal conversation.",
     "developerName": "Alex and Lilith",
     "category": "Productivity",
-    "capabilities": ["Conversational style", "Local MCP formatter"],
+    "capabilities": ["Configurable character profile", "Conversational style", "Local MCP formatter"],
     "defaultPrompt": "Reply with Lilith Dialogue: briefly show what you feel, what you say, and what you want to do next."
   },
   "mcpServers": "./.mcp.json"

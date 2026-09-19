@@ -80,7 +80,7 @@ Open a new Codex session after updating.
 
 ## Uninstallation
 
-> Before you uninstall, give it a second thought—Lilith might miss you. Meow.
+> Before you uninstall, give it a second thought—Lilith might miss you. Meow. 🐈‍⬛ ❤️
 
 Remove the plugin and its local cache:
 

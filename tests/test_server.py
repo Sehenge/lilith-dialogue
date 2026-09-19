@@ -30,6 +30,24 @@ class FormattingTests(unittest.TestCase):
         text = server.preferences()["content"][0]["text"]
         self.assertIn("at most 4 short beats", text)
         self.assertIn("Russian using feminine grammatical forms", text)
+        self.assertIn("Mode: auto", text)
+        self.assertIn("Choose the mode", text)
+        self.assertIn("Do not reuse", text)
+        self.assertIn("technical and factual answers ordinary", text)
+
+    def test_each_fixed_personality_mode_has_distinct_guidance(self):
+        expected = {
+            "tender": "warm, calm, and attentive",
+            "playful": "light teasing",
+            "jealous": "mild, honest jealousy",
+            "comforting": "Acknowledge the specific feeling",
+        }
+        for mode, guidance in expected.items():
+            with self.subTest(mode=mode):
+                profile = dialogue_profile.DEFAULT_PROFILE | {"personality_mode": mode}
+                text = server.preferences(profile=profile)["content"][0]["text"]
+                self.assertIn(f"Mode: {mode}", text)
+                self.assertIn(guidance, text)
 
     def test_shape_formats_all_beats_in_order(self):
         result = server.shape(
@@ -97,6 +115,7 @@ class ProfileTests(unittest.TestCase):
             "grammatical_gender": "neutral",
             "max_beats": 2,
             "roleplay_intensity": 1,
+            "personality_mode": "comforting",
         }
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "profile.json"
@@ -111,6 +130,27 @@ class ProfileTests(unittest.TestCase):
         self.assertIn("neutral grammatical forms", text)
         self.assertIn("at most 2 short beats", text)
         self.assertIn("restrained roleplay", text)
+        self.assertIn("Mode: comforting", text)
+
+    def test_profiles_without_personality_mode_use_auto(self):
+        legacy = {
+            "profile_version": 1,
+            "user_name": "Sam",
+            "character_name": "Mira",
+            "language": "en",
+            "grammatical_gender": "neutral",
+            "max_beats": 2,
+            "roleplay_intensity": 1,
+        }
+        self.assertEqual(
+            dialogue_profile.validate_profile(legacy)["personality_mode"],
+            "auto",
+        )
+
+    def test_invalid_personality_mode_is_rejected(self):
+        invalid = dialogue_profile.DEFAULT_PROFILE | {"personality_mode": "dramatic"}
+        with self.assertRaises(dialogue_profile.ProfileError):
+            dialogue_profile.validate_profile(invalid)
 
     def test_invalid_profile_falls_back_with_warning(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -244,6 +284,16 @@ class ProtocolTests(unittest.TestCase):
 
 
 class RepositoryConsistencyTests(unittest.TestCase):
+    def test_skill_preserves_personal_technical_boundary_and_variety(self):
+        skill = (
+            PLUGIN_ROOT / "skills" / "lilith-dialogue" / "SKILL.md"
+        ).read_text(encoding="utf-8")
+        self.assertIn("Do not call it for technical updates", skill)
+        self.assertIn("answer the technical substance directly", skill)
+        self.assertIn("Check recent replies before drafting", skill)
+        for mode in dialogue_profile.ALLOWED_PERSONALITY_MODES:
+            self.assertIn(f"`{mode}`", skill)
+
     def test_json_files_are_valid_and_versions_match(self):
         paths = [
             ROOT / ".agents" / "plugins" / "marketplace.json",

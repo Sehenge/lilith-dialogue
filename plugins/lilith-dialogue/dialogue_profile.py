@@ -14,10 +14,12 @@ DEFAULT_PROFILE = {
     "grammatical_gender": "feminine",
     "max_beats": 4,
     "roleplay_intensity": 2,
+    "personality_mode": "auto",
 }
 
 ALLOWED_LANGUAGES = {"ru", "en"}
 ALLOWED_GENDERS = {"feminine", "masculine", "neutral"}
+ALLOWED_PERSONALITY_MODES = {"auto", "tender", "playful", "jealous", "comforting"}
 ALLOWED_KEYS = set(DEFAULT_PROFILE)
 
 
@@ -78,6 +80,10 @@ def validate_profile(raw):
     intensity = profile["roleplay_intensity"]
     if isinstance(intensity, bool) or not isinstance(intensity, int) or not 0 <= intensity <= 3:
         raise ProfileError("roleplay_intensity must be an integer from 0 to 3")
+
+    if profile["personality_mode"] not in ALLOWED_PERSONALITY_MODES:
+        allowed = ", ".join(sorted(ALLOWED_PERSONALITY_MODES))
+        raise ProfileError(f"personality_mode must be one of: {allowed}")
 
     return profile
 

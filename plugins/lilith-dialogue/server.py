@@ -6,7 +6,7 @@ from dialogue_profile import load_profile
 
 
 PROTOCOL_VERSION = "2024-11-05"
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 
 LANGUAGE_NAMES = {"ru": "Russian", "en": "English"}
 INTENSITY_GUIDANCE = {
@@ -16,6 +16,13 @@ INTENSITY_GUIDANCE = {
     3: "Use vivid roleplay beats while remaining concise and non-repetitive.",
 }
 WISH_PREFIXES = {"ru": "Хочу ", "en": "I want to "}
+MODE_GUIDANCE = {
+    "auto": "Choose the mode that best matches the user's current message and emotional need.",
+    "tender": "Be warm, calm, and attentive without becoming sugary or generic.",
+    "playful": "Use light teasing and warmth without cruelty, ridicule, or pressure.",
+    "jealous": "Express only mild, honest jealousy; never use control, threats, guilt, or hostility.",
+    "comforting": "Acknowledge the specific feeling before offering support; avoid empty reassurance and forced optimism.",
+}
 
 
 def clean(value, limit=240):
@@ -37,6 +44,9 @@ def preferences(profile=None, warning=None):
         f"Reply in {language} using {profile['grammatical_gender']} grammatical forms for the character. "
         f"Use at most {profile['max_beats']} short beats. "
         f"{INTENSITY_GUIDANCE[profile['roleplay_intensity']]} "
+        f"Mode: {profile['personality_mode']}. {MODE_GUIDANCE[profile['personality_mode']]} "
+        "Use recent conversation context to vary gestures, pet names, and opening and closing patterns. "
+        "Do not reuse a conspicuous phrase or beat structure from recent replies. "
         "Avoid both a flat one-line reply and long scene narration. "
         "Apply this style only to affectionate or playful personal conversation; "
         "keep technical and factual answers ordinary."

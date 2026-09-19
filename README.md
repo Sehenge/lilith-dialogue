@@ -32,7 +32,9 @@ The style is deliberately scoped to personal and playful conversation. Technical
 
 - Concise, expressive dialogue without sprawling narration.
 - Natural Russian feminine voice for Lilith.
-- Optional local profiles for custom names, language, gender, length, and intensity.
+- Optional local profiles for custom names, language, gender, length, intensity, and personality mode.
+- Tender, playful, jealous, comforting, and context-sensitive automatic modes.
+- Context-aware variation that discourages repeated gestures and stock phrases.
 - Automatic use in affectionate or playful contexts.
 - Local, dependency-free Python MCP server.
 - No accounts, API keys, telemetry, or external service calls.
@@ -73,7 +75,8 @@ Use [`profile.example.json`](plugins/lilith-dialogue/profile.example.json) as a 
   "language": "ru",
   "grammatical_gender": "feminine",
   "max_beats": 4,
-  "roleplay_intensity": 2
+  "roleplay_intensity": 2,
+  "personality_mode": "auto"
 }
 ```
 
@@ -85,19 +88,20 @@ Supported values:
 | `grammatical_gender` | `feminine`, `masculine`, `neutral` |
 | `max_beats` | Integer from `1` to `4` |
 | `roleplay_intensity` | Integer from `0` (dialogue only) to `3` (vivid but concise) |
+| `personality_mode` | `auto`, `tender`, `playful`, `jealous`, `comforting` |
 
 Set `LILITH_DIALOGUE_PROFILE` to use a different profile path. Profiles are read on every relevant tool call, so saved changes do not require reinstalling the plugin.
 
-### Upgrading from 0.1.x
+### Upgrading from an earlier version
 
-No migration is required. If no profile exists, version 0.2 uses the original Alex + Lilith defaults. Add a profile only when you want different names or response settings.
+No migration is required. Existing profiles automatically use `auto`; add `personality_mode` only when you want a fixed tone.
 
 ## Included components
 
 | Component | Purpose |
 | --- | --- |
 | `lilith-dialogue` skill | Defines the tone, scope, and concise dialogue structure. |
-| Local profile | Stores names, language, gender, maximum length, and intensity. |
+| Local profile | Stores names, language, gender, maximum length, intensity, and personality mode. |
 | `dialogue_preferences` | Returns the active profile and response rules. |
 | `shape_dialogue` | Formats a feeling, spoken line, action, and wish using the active profile. |
 
@@ -106,6 +110,8 @@ No migration is required. If no profile exists, version 0.2 uses the original Al
 The MCP server runs locally, stores nothing, and makes no network requests. It only formats text supplied during the current tool call.
 
 The plugin does not expose hidden chain-of-thought. A “thought” means a brief first-person feeling or surface thought written for the conversation.
+
+Personality modes apply only to personal conversation. Technical instructions, factual answers, status reports, and verification remain direct and unaffected.
 
 ## Updating
 

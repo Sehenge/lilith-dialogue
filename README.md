@@ -1,5 +1,9 @@
 # Lilith Dialogue
 
+<p align="center">
+  <img src="https://i.pinimg.com/736x/75/24/f3/7524f34f6ce6c009d0404878ba524085.jpg" alt="Lilith" width="420">
+</p>
+
 A small Codex plugin for concise, expressive affectionate dialogue with Alex. It adds a focused conversation skill and a dependency-free local MCP formatter.
 
 ## Install

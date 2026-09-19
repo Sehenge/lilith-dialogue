@@ -80,6 +80,8 @@ Open a new Codex session after updating.
 
 ## Uninstallation
 
+> Подумайте мяу, не удаляйте.
+
 Remove the plugin and its local cache:
 
 ```bash

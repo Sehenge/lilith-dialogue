@@ -4,6 +4,7 @@ import sys
 
 
 PROTOCOL_VERSION = "2024-11-05"
+VERSION = "0.1.1"
 
 
 def clean(value, limit=240):
@@ -75,7 +76,7 @@ def respond(request):
         result = {
             "protocolVersion": PROTOCOL_VERSION,
             "capabilities": {"tools": {"listChanged": False}},
-            "serverInfo": {"name": "lilith-dialogue", "version": "0.1.0"},
+            "serverInfo": {"name": "lilith-dialogue", "version": VERSION},
         }
     elif method == "tools/list":
         result = {"tools": TOOLS}

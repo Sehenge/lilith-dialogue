@@ -94,11 +94,27 @@ If you no longer need the marketplace, remove it as well:
 codex plugin marketplace remove lilith-dialogue
 ```
 
+## Development
+
+The project uses only the Python standard library. Run the complete local check from the repository root:
+
+```bash
+python3 -m unittest discover -s tests -v
+python3 -m compileall -q plugins/lilith-dialogue tests
+python3 -m json.tool .agents/plugins/marketplace.json > /dev/null
+python3 -m json.tool plugins/lilith-dialogue/.codex-plugin/plugin.json > /dev/null
+python3 -m json.tool plugins/lilith-dialogue/.mcp.json > /dev/null
+```
+
+See [RELEASING.md](RELEASING.md) for the versioned release process and [CHANGELOG.md](CHANGELOG.md) for release history.
+
 ## Project structure
 
 ```text
 .
+├── .github/workflows/
 ├── .agents/plugins/marketplace.json
+├── tests/
 └── plugins/lilith-dialogue/
     ├── .codex-plugin/plugin.json
     ├── .mcp.json
